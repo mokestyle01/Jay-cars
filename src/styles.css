@@ -1,0 +1,211 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * JAY design system.
+ *
+ * Shared shadcn tokens live on :root. Each website version is a theme scope:
+ *   .theme-v1 -> premium dark luxury automotive
+ *   .theme-v2 -> bright sporty modern automotive
+ * Both scopes override the same semantic tokens, so components never hardcode
+ * colors and can be shared/merged between the two Git branches.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-outline: var(--outline);
+  --font-display: var(--font-display-family);
+  --font-body: var(--font-body-family);
+  --shadow-elevate: var(--shadow-elevate);
+}
+
+:root {
+  --radius: 0.5rem;
+  --font-display-family: "Bodoni Moda", Georgia, serif;
+  --font-body-family: "Barlow", system-ui, sans-serif;
+
+  /* Default = premium dark (also used by the public entry + auth screens) */
+  --background: oklch(0.15 0.008 260);
+  --foreground: oklch(0.97 0.004 260);
+  --surface: oklch(0.19 0.009 260);
+  --surface-2: oklch(0.24 0.01 260);
+  --card: oklch(0.19 0.009 260);
+  --card-foreground: oklch(0.97 0.004 260);
+  --popover: oklch(0.19 0.009 260);
+  --popover-foreground: oklch(0.97 0.004 260);
+  --primary: oklch(0.83 0.11 88);
+  --primary-foreground: oklch(0.17 0.01 90);
+  --brand: oklch(0.83 0.11 88);
+  --brand-foreground: oklch(0.17 0.01 90);
+  --secondary: oklch(0.26 0.01 260);
+  --secondary-foreground: oklch(0.97 0.004 260);
+  --muted: oklch(0.24 0.01 260);
+  --muted-foreground: oklch(0.72 0.012 260);
+  --accent: oklch(0.28 0.012 260);
+  --accent-foreground: oklch(0.97 0.004 260);
+  --destructive: oklch(0.6 0.2 25);
+  --destructive-foreground: oklch(0.98 0.004 260);
+  --border: oklch(1 0 0 / 12%);
+  --outline: oklch(1 0 0 / 18%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.83 0.11 88);
+  --shadow-elevate: 0 30px 80px -40px oklch(0 0 0 / 0.8);
+}
+
+.theme-v1 {
+  --radius: 0.25rem;
+  --font-display-family: "Bodoni Moda", Georgia, serif;
+  --font-body-family: "Barlow", system-ui, sans-serif;
+  --background: oklch(0.14 0.008 260);
+  --foreground: oklch(0.97 0.004 260);
+  --surface: oklch(0.18 0.009 260);
+  --surface-2: oklch(0.23 0.01 260);
+  --card: oklch(0.18 0.009 260);
+  --card-foreground: oklch(0.97 0.004 260);
+  --primary: oklch(0.83 0.11 88);
+  --primary-foreground: oklch(0.17 0.01 90);
+  --brand: oklch(0.83 0.11 88);
+  --brand-foreground: oklch(0.17 0.01 90);
+  --muted: oklch(0.23 0.01 260);
+  --muted-foreground: oklch(0.73 0.012 260);
+  --border: oklch(1 0 0 / 12%);
+  --outline: oklch(1 0 0 / 18%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.83 0.11 88);
+  --shadow-elevate: 0 40px 90px -50px oklch(0 0 0 / 0.85);
+}
+
+.theme-v2 {
+  --radius: 1.25rem;
+  --font-display-family: "Bebas Neue", Impact, sans-serif;
+  --font-body-family: "Barlow", system-ui, sans-serif;
+  --background: oklch(0.985 0.004 250);
+  --foreground: oklch(0.18 0.02 260);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.955 0.012 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.02 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.02 260);
+  --primary: oklch(0.56 0.22 259);
+  --primary-foreground: oklch(0.99 0.002 250);
+  --brand: oklch(0.86 0.22 130);
+  --brand-foreground: oklch(0.2 0.05 140);
+  --secondary: oklch(0.95 0.014 250);
+  --secondary-foreground: oklch(0.2 0.02 260);
+  --muted: oklch(0.955 0.012 250);
+  --muted-foreground: oklch(0.5 0.02 258);
+  --accent: oklch(0.93 0.05 130);
+  --accent-foreground: oklch(0.2 0.05 140);
+  --border: oklch(0.2 0.02 260 / 12%);
+  --outline: oklch(0.2 0.02 260 / 20%);
+  --input: oklch(0.2 0.02 260 / 18%);
+  --ring: oklch(0.56 0.22 259);
+  --shadow-elevate: 0 24px 60px -30px oklch(0.2 0.05 260 / 0.35);
+}
+
+@utility text-balance-tight {
+  text-wrap: balance;
+}
+
+@utility hairline {
+  border-bottom: 1px solid var(--color-border);
+}
+
+@utility brand-gradient {
+  background-image: linear-gradient(
+    120deg,
+    var(--color-brand),
+    color-mix(in oklab, var(--color-brand) 55%, var(--color-primary))
+  );
+}
+
+@utility fade-bottom {
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body-family);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display-family);
+  }
+}
+
+@keyframes jay-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: jay-page-enter 500ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

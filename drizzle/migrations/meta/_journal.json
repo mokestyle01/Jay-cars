@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794239447507,
+      "tag": "0000_create_profile_avatars_bucket",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794239468358,
+      "tag": "0001_customer_vehicle_submissions_and_requests",
+      "breakpoints": true
+    }
+  ]
+}
