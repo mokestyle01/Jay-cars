@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 
 export type OAuthProvider = "google" | "github" | "discord" | "twitter";
 
@@ -26,6 +26,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
     const { data: subscription } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       if (!mounted) return;
@@ -50,6 +55,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session,
     loading,
     async signUp(email, password) {
+      if (!isSupabaseConfigured) {
+        return {
+          error: "Authentication is unavailable because Supabase is not configured.",
+          needsConfirmation: false,
+        };
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -59,10 +71,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: null, needsConfirmation: data.session === null };
     },
     async signIn(email, password) {
+      if (!isSupabaseConfigured) {
+        return { error: "Authentication is unavailable because Supabase is not configured." };
+      }
+
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       return { error: error ? error.message : null };
     },
     async signInWithProvider(provider) {
+      if (!isSupabaseConfigured) {
+        return { error: "Authentication is unavailable because Supabase is not configured." };
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo: `${window.location.origin}/auth` },
@@ -70,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: error ? error.message : null };
     },
     async signOut() {
-      await supabase.auth.signOut();
+      if (isSupabaseConfigured) await supabase.auth.signOut();
     },
   };
 

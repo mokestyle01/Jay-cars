@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import type { Json, Tables } from "@/integrations/supabase/types";
 
 type Car = Tables<"cars">;
@@ -32,6 +32,12 @@ export default function CarDetailPage() {
   const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setError("Vehicle details are unavailable until Supabase is configured for this deployment.");
+      setLoading(false);
+      return;
+    }
+
     let active = true;
     async function loadCar() {
       const { data: carData, error: carError } = await supabase

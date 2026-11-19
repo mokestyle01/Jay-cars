@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Car = Tables<"cars">;
@@ -21,6 +21,14 @@ export default function MarketplacePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setError(
+        "Vehicle listings are unavailable until Supabase is configured for this deployment.",
+      );
+      setLoading(false);
+      return;
+    }
+
     let active = true;
     async function loadCars() {
       const { data, error: carsError } = await supabase

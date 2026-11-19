@@ -3,6 +3,14 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
 import { brokeredPreviewStorage } from "./previewAuthStorage";
 
+// Next.js requires direct access to inline public environment variables in browser bundles.
+// @ts-expect-error TypeScript requires bracket notation for index-signature properties.
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+// @ts-expect-error TypeScript requires bracket notation for index-signature properties.
+const SUPABASE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
+
 function isNewSupabaseApiKey(value: string): boolean {
   return value.startsWith("sb_publishable_") || value.startsWith("sb_secret_");
 }
@@ -31,15 +39,6 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 }
 
 function createSupabaseClient() {
-  const SUPABASE_URL =
-    process.env["NEXT_PUBLIC_SUPABASE_URL"] ||
-    process.env["VITE_SUPABASE_URL"] ||
-    process.env["SUPABASE_URL"];
-  const SUPABASE_PUBLISHABLE_KEY =
-    process.env["NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"] ||
-    process.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
-    process.env["SUPABASE_PUBLISHABLE_KEY"];
-
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const missing = [
       ...(!SUPABASE_URL ? ["SUPABASE_URL"] : []),

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { isSupabaseConfigured } from "@/integrations/supabase/client";
 import { useAuth, type OAuthProvider } from "@/hooks/useAuth";
 
 const oauthProviders: { id: OAuthProvider; label: string }[] = [
@@ -95,6 +96,13 @@ export default function AuthPage() {
               ? "Access the JAY collection."
               : "Create your account with email or your preferred sign-in provider."}
           </p>
+          {!isSupabaseConfigured && (
+            <p role="alert" className="mt-4 text-sm text-destructive">
+              Sign-in is unavailable because Supabase is not configured. Set
+              NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY in the deployment
+              environment.
+            </p>
+          )}
 
           <div className="mt-8 grid grid-cols-2 gap-3">
             {oauthProviders.map((provider) => (
@@ -102,7 +110,7 @@ export default function AuthPage() {
                 key={provider.id}
                 type="button"
                 onClick={() => handleProviderSignIn(provider.id)}
-                disabled={busy}
+                disabled={busy || !isSupabaseConfigured}
                 className="h-12 border border-input bg-background text-sm font-medium text-foreground transition-colors hover:border-brand disabled:opacity-60"
               >
                 {busy ? "Please wait…" : `Continue with ${provider.label}`}
@@ -162,7 +170,7 @@ export default function AuthPage() {
 
             <button
               type="submit"
-              disabled={busy}
+              disabled={busy || !isSupabaseConfigured}
               className="h-12 w-full bg-brand text-xs font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
             >
               {busy ? "Please wait…" : mode === "login" ? "Log in" : "Sign up"}
