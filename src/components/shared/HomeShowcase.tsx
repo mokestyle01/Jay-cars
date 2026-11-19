@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
+import { getLocalCarImage } from "@/data/cars";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Car = Tables<"cars">;
@@ -157,37 +158,40 @@ export function HomeShowcase() {
 
         {cars.length > 0 && (
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {cars.slice(0, 3).map((car) => (
-              <a
-                key={car.id}
-                href={`/cars/${car.id}`}
-                className="group overflow-hidden border border-border bg-surface transition-colors hover:border-brand/60"
-              >
-                {images[car.id] ? (
-                  <img
-                    src={images[car.id]}
-                    alt={`${car.year} ${car.brand} ${car.name}`}
-                    loading="lazy"
-                    className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="flex aspect-[4/3] items-center justify-center bg-surface-2 text-xs uppercase tracking-widest text-muted-foreground">
-                    Photos coming soon
+            {cars.slice(0, 3).map((car) => {
+              const image = images[car.id] ?? getLocalCarImage(car.name);
+              return (
+                <a
+                  key={car.id}
+                  href={`/cars/${car.id}`}
+                  className="group overflow-hidden border border-border bg-surface transition-colors hover:border-brand/60"
+                >
+                  {image ? (
+                    <img
+                      src={image}
+                      alt={`${car.year} ${car.brand} ${car.name}`}
+                      loading="lazy"
+                      className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex aspect-[4/3] items-center justify-center bg-surface-2 text-xs uppercase tracking-widest text-muted-foreground">
+                      Photos coming soon
+                    </div>
+                  )}
+                  <div className="p-5">
+                    <p className="text-[10px] uppercase tracking-widest text-brand">
+                      {car.featured ? "Featured" : "Latest arrival"} · {car.brand}
+                    </p>
+                    <h3 className="mt-2 text-2xl">
+                      {car.year} {car.name}
+                    </h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {car.model} · {car.availability}
+                    </p>
                   </div>
-                )}
-                <div className="p-5">
-                  <p className="text-[10px] uppercase tracking-widest text-brand">
-                    {car.featured ? "Featured" : "Latest arrival"} · {car.brand}
-                  </p>
-                  <h3 className="mt-2 text-2xl">
-                    {car.year} {car.name}
-                  </h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {car.model} · {car.availability}
-                  </p>
-                </div>
-              </a>
-            ))}
+                </a>
+              );
+            })}
           </div>
         )}
         {!loading && !error && cars.length === 0 && (

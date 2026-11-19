@@ -103,6 +103,13 @@ export const flagshipCar = {
   ],
 };
 
+export function getLocalCarImage(name: string): string | undefined {
+  const car = cars.find((item) => item.name === name);
+  if (car) return car.image.src;
+  if (name === flagshipCar.name) return flagshipCar.image.src;
+  return undefined;
+}
+
 export const requestableVehicles = [
   ...cars.map(({ id, name }) => ({ id, name })),
   { id: "sovereign-coupe", name: flagshipCar.name },

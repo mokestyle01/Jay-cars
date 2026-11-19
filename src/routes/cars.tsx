@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
+import { getLocalCarImage } from "@/data/cars";
 import type { Tables } from "@/integrations/supabase/types";
 
 type Car = Tables<"cars">;
@@ -238,56 +239,59 @@ export default function MarketplacePage() {
         )}
         {!loading && !error && filteredCars.length > 0 && (
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredCars.map((car) => (
-              <a
-                key={car.id}
-                href={`/cars/${car.id}`}
-                className="group overflow-hidden border border-border bg-surface transition-colors hover:border-brand/60"
-              >
-                <div className="relative overflow-hidden bg-surface-2">
-                  {images[car.id] ? (
-                    <img
-                      src={images[car.id]}
-                      alt={`${car.year} ${car.brand} ${car.name}`}
-                      loading="lazy"
-                      className="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-64 items-center justify-center text-xs uppercase tracking-widest text-muted-foreground">
-                      Photos coming soon
+            {filteredCars.map((car) => {
+              const image = images[car.id] ?? getLocalCarImage(car.name);
+              return (
+                <a
+                  key={car.id}
+                  href={`/cars/${car.id}`}
+                  className="group overflow-hidden border border-border bg-surface transition-colors hover:border-brand/60"
+                >
+                  <div className="relative overflow-hidden bg-surface-2">
+                    {image ? (
+                      <img
+                        src={image}
+                        alt={`${car.year} ${car.brand} ${car.name}`}
+                        loading="lazy"
+                        className="h-64 w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-64 items-center justify-center text-xs uppercase tracking-widest text-muted-foreground">
+                        Photos coming soon
+                      </div>
+                    )}
+                    {car.featured && (
+                      <span className="absolute left-4 top-4 bg-brand px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-brand-foreground">
+                        Featured
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[11px] uppercase tracking-[0.25em] text-brand">
+                        {car.brand}
+                      </p>
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                        {car.availability}
+                      </p>
                     </div>
-                  )}
-                  {car.featured && (
-                    <span className="absolute left-4 top-4 bg-brand px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-brand-foreground">
-                      Featured
-                    </span>
-                  )}
-                </div>
-                <div className="p-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-[11px] uppercase tracking-[0.25em] text-brand">
-                      {car.brand}
+                    <h3 className="mt-2 text-2xl">
+                      {car.year} {car.name}
+                    </h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {car.model} · {car.mileage.toLocaleString()} mi · {car.transmission}
                     </p>
-                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-                      {car.availability}
+                    <p className="mt-5 border-t border-border pt-4 font-display text-2xl">
+                      {new Intl.NumberFormat(undefined, {
+                        style: "currency",
+                        currency: car.currency,
+                        maximumFractionDigits: 0,
+                      }).format(car.price)}
                     </p>
                   </div>
-                  <h3 className="mt-2 text-2xl">
-                    {car.year} {car.name}
-                  </h3>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {car.model} · {car.mileage.toLocaleString()} mi · {car.transmission}
-                  </p>
-                  <p className="mt-5 border-t border-border pt-4 font-display text-2xl">
-                    {new Intl.NumberFormat(undefined, {
-                      style: "currency",
-                      currency: car.currency,
-                      maximumFractionDigits: 0,
-                    }).format(car.price)}
-                  </p>
-                </div>
-              </a>
-            ))}
+                </a>
+              );
+            })}
           </div>
         )}
       </section>

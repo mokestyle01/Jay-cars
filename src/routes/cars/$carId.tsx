@@ -4,6 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
+import { getLocalCarImage } from "@/data/cars";
 import type { Json, Tables } from "@/integrations/supabase/types";
 
 type Car = Tables<"cars">;
@@ -182,6 +183,7 @@ export default function CarDetailPage() {
     currency: car.currency,
     maximumFractionDigits: 0,
   }).format(car.price);
+  const fallbackImage = getLocalCarImage(car.name);
   const engineSpecs = Object.entries(asJsonObject(car.engine_specs));
   const specifications = Object.entries(asJsonObject(car.specifications));
 
@@ -204,10 +206,10 @@ export default function CarDetailPage() {
       <div className="mx-auto grid max-w-7xl gap-12 px-5 py-10 lg:grid-cols-[1.4fr_0.8fr] lg:px-10 lg:py-16">
         <section>
           <div className="overflow-hidden bg-surface-2">
-            {images[activeImage] ? (
+            {images[activeImage] || fallbackImage ? (
               <img
-                src={imageUrl(images[activeImage])}
-                alt={images[activeImage].alt_text || `${car.year} ${car.brand} ${car.name}`}
+                src={images[activeImage] ? imageUrl(images[activeImage]) : fallbackImage}
+                alt={images[activeImage]?.alt_text || `${car.year} ${car.brand} ${car.name}`}
                 className="aspect-[4/3] w-full object-cover"
               />
             ) : (

@@ -77,7 +77,9 @@ The public marketplace is available at `/cars`. Admins can add and manage listin
 signed-in customers can review their enquiry and order history at `/my-requests`.
 Set `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, and
 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in local `.env.local` and Vercel project environment
-settings.
+settings. For a fresh project, link the Supabase CLI to this project and run `supabase db push`
+to apply the migrations in order. The latest migration seeds five JAY showroom vehicles; the
+listing pages use the bundled showroom images until marketplace photos are uploaded.
 
 The V1 and V2 showrooms include an interactive three-car motion showcase and powertrain
 explainer for the existing car models. It is an illustrative, step-by-step animation based on
