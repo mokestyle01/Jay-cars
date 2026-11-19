@@ -1,5 +1,7 @@
 # JAY — Premium Automotive Marketplace
 
+Jay-cars makes it simple to find and enquire about your preferred vehicle.
+
 JAY is built with the Next.js App Router, TypeScript, Tailwind CSS, and Supabase. It includes a
 public vehicle marketplace, customer enquiries and order requests, role-restricted admin tools,
 and two authenticated showroom designs.
@@ -77,6 +79,7 @@ Set `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, and
 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in local `.env.local` and Vercel project environment
 settings.
 
-The V1 and V2 showrooms include an interactive powertrain explainer for the existing car
-models. It is an illustrative, step-by-step animation based on the displayed fuel type and
-transmission, not recorded vehicle test footage or a substitute for verified test results.
+The V1 and V2 showrooms include an interactive three-car motion showcase and powertrain
+explainer for the existing car models. It is an illustrative, step-by-step animation based on
+the displayed fuel type and transmission, not recorded vehicle test footage or a substitute
+for verified test results.
